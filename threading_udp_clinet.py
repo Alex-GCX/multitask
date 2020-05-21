@@ -25,6 +25,8 @@ def main():
     print('--------------客户端------------------')
     # 创建套接字
     udp_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # 注意UDP在调用接收recvfrom前，要么先调用了sendto，要么先绑定了本地地址，否则直接调用recvfrom会报错：udp_client.recvfrom(1024)提供了一个无效的参数
+    # 这里因为接收和发送是分为了两个线程，因此不能保证先调用发送，所以需要先绑定本地IP和端口
     # 设置客户端地址
     client_addr = ('localhost', 8909)
     udp_client.bind(client_addr)
