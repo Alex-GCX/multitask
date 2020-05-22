@@ -9,7 +9,7 @@ def worker(msg):
     print('----------%s开始执行，进程号%d' % (msg, os.getpid()))
     time.sleep(random.random())
     end_time = time.time()
-    print('%s执行结束, 耗时%0.2f' % (msg, (end_time - start_time)))
+    print('----------%s执行结束, 耗时%0.2f' % (msg, (end_time - start_time)))
     # 异常测试
     print('捕获下面的print异常前')
     try:
@@ -27,9 +27,12 @@ def main():
     for i in range(1, 8):
         # 每次循环将会用空闲出来的子进程去调用目标
         pool.apply_async(worker, (i, ))
+    print('------start------')
+    # 关闭进程池，关闭后不再接收新的请求
     pool.close()
+    # 等待pool中所有进程结束，必须放在close()后面
     pool.join()
-    # worker(0)
+    print('------end------')
 
 
 if __name__ == '__main__':
